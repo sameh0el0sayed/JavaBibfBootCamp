@@ -1,10 +1,10 @@
-# Get current date in format DD-MMM-YYYY
-$today = (Get-Date).ToString("dd-MMM-yyyy")
+# Get date and week number
+$today = (Get-Date -Format "dd-MMM-yyyy")
+$week  = (Get-Date -Format "ww")
 
 # Commit message
-$msg = "HW -> $today"
+$msg = "HW (Week $week) ($today)"
 
-# Git add, commit, and push
 git add .
 git commit -m "$msg"
 git push
