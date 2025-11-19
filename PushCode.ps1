@@ -1,11 +1,10 @@
 # Get today's date
 $today = Get-Date
-
-# Week of month = ((day-1) / 7) + 1
 $weekOfMonth = [math]::Ceiling($today.Day / 7)
-
-# Format date
 $todayFormatted = $today.ToString("dd-MMM-yyyy")
+
+# Get repo URL
+$repoUrl = git remote get-url origin
 
 # Commit message
 $msg = "HW (Week $weekOfMonth) ($todayFormatted)"
@@ -13,3 +12,9 @@ $msg = "HW (Week $weekOfMonth) ($todayFormatted)"
 git add .
 git commit -m "$msg"
 git push
+
+# Show repo URL
+Write-Output "`nRepository URL: $repoUrl"
+
+Read-Host "`nPress Enter to continue..."
+
