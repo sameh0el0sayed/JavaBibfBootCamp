@@ -21,4 +21,35 @@ void main() {
     service.getMinSalary();
     service.getAverageSalaries();
     service.getMaximumPaidEmployee();
+
+    Optional<Integer> age=Optional.ofNullable(null);
+    System.out.println(age.isEmpty());
+
+
+    //2nd part of HM
 }
+        public class CommonPrefix {
+
+            public static String longestCommonPrefix(String[] words) {
+                if (words == null || words.length == 0) return "";
+                int minLen = Integer.MAX_VALUE;
+                for (String w : words) {
+                    if (w.length() < minLen) minLen = w.length();
+                }
+                if (minLen == 0) return "";
+                for (int i = 0; i < minLen; i++) {
+                    char c = words[0].charAt(i);
+                    for (int j = 1; j < words.length; j++) {
+                        if (words[j].charAt(i) != c) {
+                            return words[0].substring(0, i);
+                        }
+                    }
+                }
+                return words[0].substring(0, minLen);
+            }
+
+            public static void main(String[] args) {
+                System.out.println(longestCommonPrefix(new String[]{"flower", "flow", "flight"}));
+                System.out.println(longestCommonPrefix(new String[]{"dog", "racecar", "car"}));
+            }
+        }
