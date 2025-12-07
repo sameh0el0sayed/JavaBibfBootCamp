@@ -1,0 +1,10 @@
+[
+  {
+    "id": "c1",
+    "firstName": "John",
+    "middleName": null,
+    "lastName": "Doe",
+    "UserName": "bibf",
+    "passwordHash": "$2a$10$yKJf42aekerl69L2ukE8OuaQJptBF68/xAaJA0PS8KPEWxt1JRbze"
+  }
+]

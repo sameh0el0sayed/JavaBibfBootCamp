@@ -1,0 +1,10 @@
+[
+  {
+    "id": "c1",
+    "firstName": "John",
+    "middleName": null,
+    "lastName": "Doe",
+    "UserName": "bibf",
+    "passwordHash": "pass"
+  }
+]
