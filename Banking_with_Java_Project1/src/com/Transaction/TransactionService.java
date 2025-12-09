@@ -1,5 +1,8 @@
 package com.Transaction;
 import com.FileHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -7,11 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TransactionService {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    private final FileHelper<TransactionModel> fileHelper;
+public class TransactionService implements ITransactionService {
+
+    protected FileHelper<TransactionModel> fileHelper;
     private final ArrayList<TransactionModel> transactions;
-    private static final DateTimeFormatter FORMATTER =
+    public static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
 
 
@@ -104,4 +109,5 @@ public class TransactionService {
         );
         save(tx);
     }
+
 }

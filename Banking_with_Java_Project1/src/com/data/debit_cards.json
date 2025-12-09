@@ -1,0 +1,26 @@
+[
+  {
+    "type": "Mastercard Platinum",
+    "withdrawLimitPerDay": 20000,
+    "transferLimitPerDay": 40000,
+    "transferLimitPerDayOwnAccount": 80000,
+    "depositLimitPerDay": 100000,
+    "depositLimitPerDayOwnAccount": 200000
+  },
+  {
+    "type": "Mastercard Titanium",
+    "withdrawLimitPerDay": 10000,
+    "transferLimitPerDay": 20000,
+    "transferLimitPerDayOwnAccount": 40000,
+    "depositLimitPerDay": 100000,
+    "depositLimitPerDayOwnAccount": 200000
+  },
+  {
+    "type": "Mastercard",
+    "withdrawLimitPerDay": 5000,
+    "transferLimitPerDay": 10000,
+    "transferLimitPerDayOwnAccount": 20000,
+    "depositLimitPerDay": 100000,
+    "depositLimitPerDayOwnAccount": 200000
+  }
+]

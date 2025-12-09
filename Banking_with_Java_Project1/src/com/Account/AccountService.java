@@ -1,19 +1,19 @@
 package com.Account;
 
-import com.Customer.CustomerModel;
 import com.FileHelper;
 import com.Transaction.TransactionService;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import static org.mockito.Mockito.*;
 
-public class AccountService {
+public class AccountService implements IAccountService{
 
-    private final FileHelper<AccountModel> fileHelper;
-    private ArrayList<AccountModel> accounts;
+    protected FileHelper<AccountModel> fileHelper;
+    protected ArrayList<AccountModel> accounts;
     private  String Userid;
 
-    private final TransactionService transactionService;
+    protected TransactionService transactionService;
     public AccountService(String _userID) {
         this.fileHelper = new FileHelper<>(
                 "src/com/data/accounts.json",
@@ -113,4 +113,7 @@ public class AccountService {
                 amount
         );
     }
+
+
+
 }

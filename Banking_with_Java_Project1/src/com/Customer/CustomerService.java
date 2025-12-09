@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CustomerService {
+public class CustomerService implements ICustomerService {
 
  FileHelper<CustomerModel> fileHelper=new FileHelper<>(
          "src/com/data/customers.json",
@@ -20,10 +20,10 @@ public class CustomerService {
         return fileHelper.readAll();
     }
     // Get a customer by ID
-    public Optional<CustomerModel> findById(String id) {
+    public CustomerModel findById(String id) {
         return loadAll().stream()
                 .filter(c -> c.getId().equals(id))
-                .findFirst();
+                .findFirst().orElse(null);
     }
     public CustomerModel findByUsername(String username) {
         return loadAll().stream()

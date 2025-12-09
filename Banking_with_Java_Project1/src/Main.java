@@ -203,7 +203,7 @@ void main() {
                             localdatefrom = LocalDateTime.parse(datefrom, FORMATTER);
                             localdateto   = LocalDateTime.parse(dateto, FORMATTER);
                         } catch (Exception e) {
-                            System.out.println("❌ Invalid date format. Use: yyyy-MM-dd HH:mm:ss");
+                            System.out.println("Invalid date format. Use: yyyy-MM-dd HH:mm:ss");
                             return;
                         }
 
