@@ -9,11 +9,14 @@ public class LoginSys {
     static String dfPassword="pass";
 
     public static boolean login(AuthModel _authModel){
-        CustomerService customerService=new CustomerService();
-        CustomerModel customer=customerService.findByUsernamePass(_authModel.getUserName(),_authModel.getPassword());
-
         String hpPassword=hashPassword(_authModel.Password); //for testing
-        return   customer.getPasswordHash().equals(hpPassword);
+
+        CustomerService customerService=new CustomerService();
+        CustomerModel customer=customerService.findByUsername(_authModel.getUserName());
+        if (customer==null){
+            return  false;
+        }
+        return   checkPassword(_authModel.Password, customer.getPasswordHash());
     }
 
     public static String hashPassword(String plainPassword) {

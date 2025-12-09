@@ -2,9 +2,9 @@
   {
     "id": "c1",
     "firstName": "John",
-    "middleName": null,
+    "middleName": "",
     "lastName": "Doe",
-    "UserName": "bibf",
-    "passwordHash": "$2a$10$yKJf42aekerl69L2ukE8OuaQJptBF68/xAaJA0PS8KPEWxt1JRbze"
+    "UserName": "user",
+    "passwordHash": "$2a$10$K9NZAc0HPr5p31nMRaEDqO1/Z9dbFp9blZK/Zg.sezQrvY61o1yn."
   }
 ]

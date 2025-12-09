@@ -30,7 +30,7 @@ public final  class CustomerModel {
 
         this.id = Objects.requireNonNull(id, "id");
         this.firstName = Objects.requireNonNull(firstName, "firstName");
-        this.middleName = middleName; // may be null
+        this.middleName = Objects.requireNonNull(lastName, "middleName"); // may be null
         this.lastName = Objects.requireNonNull(lastName, "lastName");
         this.UserName = Objects.requireNonNull(UserName, "UserName");
         this.passwordHash =  Objects.requireNonNull(passwordHash, "passwordHash");
@@ -47,8 +47,8 @@ public final  class CustomerModel {
         return firstName;
     }
 
-    public Optional<String> getMiddleName() {
-        return Optional.ofNullable(middleName);
+    public String getMiddleName() {
+        return middleName;
     }
 
     public String getLastName() {
@@ -63,11 +63,7 @@ public final  class CustomerModel {
         return passwordHash;
     }
 
-    public String getFullName() {
-        return getMiddleName()
-                .map(m -> firstName + " " + m + " " + lastName)
-                .orElse(firstName + " " + lastName);
-    }
+
 
 }
 

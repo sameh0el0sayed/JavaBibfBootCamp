@@ -11,7 +11,7 @@ import java.util.Optional;
 public class CustomerService {
 
  FileHelper<CustomerModel> fileHelper=new FileHelper<>(
-         "data/customers.json",
+         "src/com/data/customers.json",
          CustomerModel[].class
  );
 
