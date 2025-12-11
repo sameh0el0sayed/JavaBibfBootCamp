@@ -1,10 +1,1 @@
-[
-  {
-    "id": "c1",
-    "firstName": "John",
-    "middleName": "",
-    "lastName": "Doe",
-    "UserName": "user",
-    "passwordHash": "$2a$10$K9NZAc0HPr5p31nMRaEDqO1/Z9dbFp9blZK/Zg.sezQrvY61o1yn."
-  }
-]
+[{"id":"c1","firstName":"John","middleName":"Doe","lastName":"Doe","userName":"user","passwordHash":"$2a$10$K9NZAc0HPr5p31nMRaEDqO1/Z9dbFp9blZK/Zg.sezQrvY61o1yn."},{"id":"c2","firstName":"sameh","middleName":"rajab","lastName":"rajab","userName":"sameh","passwordHash":"$2a$10$cD/Lnh.rZKhHehPQrhctxuWYz0tXs1z6RMDoDZM0AS1xWYN57FRCy"}]

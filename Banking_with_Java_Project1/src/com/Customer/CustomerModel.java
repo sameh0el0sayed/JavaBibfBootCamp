@@ -25,14 +25,14 @@ public final  class CustomerModel {
             @JsonProperty("firstName") String firstName,
             @JsonProperty("middleName") String middleName,
             @JsonProperty("lastName") String lastName,
-            @JsonProperty("UserName") String UserName,
+            @JsonProperty("userName") String UserName,
             @JsonProperty("passwordHash") String passwordHash) {
 
         this.id = Objects.requireNonNull(id, "id");
         this.firstName = Objects.requireNonNull(firstName, "firstName");
         this.middleName = Objects.requireNonNull(lastName, "middleName"); // may be null
         this.lastName = Objects.requireNonNull(lastName, "lastName");
-        this.UserName = Objects.requireNonNull(UserName, "UserName");
+        this.UserName = Objects.requireNonNull(UserName, "userName");
         this.passwordHash =  Objects.requireNonNull(passwordHash, "passwordHash");
     }
 

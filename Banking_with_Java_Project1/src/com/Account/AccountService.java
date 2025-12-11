@@ -55,6 +55,16 @@ public class AccountService implements IAccountService{
         return result;
     }
 
+    public ArrayList<AccountModel> findByUserId(String _userId) {
+        ArrayList<AccountModel> result = new ArrayList<>();
+        for (AccountModel a : accounts) {
+            if (a.getUserId().equals(_userId)) {
+                result.add(a);
+            }
+        }
+        return result;
+    }
+
 
     public AccountModel findSavingsAccount() {
         return accounts.stream()
