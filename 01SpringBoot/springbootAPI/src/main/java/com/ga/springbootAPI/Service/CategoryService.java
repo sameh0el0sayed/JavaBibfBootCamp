@@ -1,9 +1,11 @@
-package com.ga.DeliverablesHW.Service;
+package com.ga.springbootAPI.Service;
 
-import com.ga.DeliverablesHW.Entity.Category;
-import com.ga.DeliverablesHW.Repository.CategoryRepository;
+
+import com.ga.springbootAPI.Entity.Category;
+import com.ga.springbootAPI.Repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,6 +25,7 @@ public class CategoryService {
     }
 
     public Category CreateCategory(Category model){
+        model.setCreatedAt(LocalDateTime.now());
         return CategoryRepository.save(model);
     }
 
@@ -30,6 +33,7 @@ public class CategoryService {
         Category updateCategory= getCategoryById(model.getId());
         updateCategory.setName(model.getName());
         updateCategory.setDescription(model.getName());
+        updateCategory.setUpdatedAt(LocalDateTime.now());
         return CategoryRepository.save(updateCategory);
     }
 
@@ -38,3 +42,4 @@ public class CategoryService {
         CategoryRepository.delete(deleteCategory);
     }
 }
+

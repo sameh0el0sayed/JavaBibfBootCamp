@@ -18,7 +18,6 @@ public class ItemService {
         this.categoryRepository = categoryRepository;
     }
 
-
     public List<Item> getAllItems(){
         return itemRepository.findAll();
     }
