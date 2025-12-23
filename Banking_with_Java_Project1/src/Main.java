@@ -54,6 +54,8 @@ void main() {
                 System.out.println(BLUE+"10-Check Customer Accounts by username");
                 System.out.println(BLUE+"11-Create Account For Me");
                 System.out.println(BLUE + "12-Pay overdraft fee and reactivate account");
+                System.out.println(BLUE+"13-Transaction Log (Print Pdf)");
+
 
                 System.out.println(BLUE+"0-Exit");
 
@@ -258,8 +260,7 @@ void main() {
                                 );
                             }
                         }
-                        String pdfPath = "D:\\temp\\generateTransactionPDF.pdf";
-                        PDFUtil.generateTransactionPDF(myTrans, pdfPath);
+
                         break;
                     case "9":
                         TransactionService FtransactionService =new TransactionService();
@@ -370,7 +371,20 @@ void main() {
                             System.out.println(RED + "Error: " + e.getMessage());
                         }
                         break;
+                    case "13":
+                        TransactionService PDFtransactionService =new TransactionService();
+                        System.out.print(BLUE+"\nEnter Account ID: ");
+                        String PDFTranAccId = scanner.nextLine();
+                        List<TransactionModel> PDFmyTrans=PDFtransactionService.findByAccountId(PDFTranAccId);
+                        if (PDFmyTrans.isEmpty()) {
+                            System.out.println(RED+"You have no transaction log.");
+                        } else {
+                            System.out.println(RED+"\n===== Your Log PDF Is Generated=====");
 
+                            String pdfPath = "D:\\temp\\generateTransactionPDF.pdf";
+                            PDFUtil.generateTransactionPDF(PDFmyTrans, pdfPath);
+                        }
+                        break;
                     case "0":
                         System.out.println(BLUE+"Goodbye!");
                         running = false;

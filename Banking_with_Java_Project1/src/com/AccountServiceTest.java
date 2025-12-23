@@ -1,6 +1,5 @@
 package com;
 
-
 import com.Account.AccountModel;
 import com.Account.AccountService;
 import com.Account.AccountType;
@@ -14,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AccountServiceTest {
+
     private AccountService service;
     private FileHelper<AccountModel> fileHelperMock;
     private TransactionService transactionMock;
@@ -36,8 +36,8 @@ public class AccountServiceTest {
         };
 
         // Create sample accounts
-        service.create(new AccountModel("A1", "U1", AccountType.SAVINGS, 500,"Mastercard Titanium",0,true));
-        service.create(new AccountModel("A2", "U1", AccountType.CHECKING, 300,"Mastercard",0,false));
+        service.create(new AccountModel("A1", "U1", AccountType.SAVINGS, 500, "Mastercard Titanium", 0, true));
+        service.create(new AccountModel("A2", "U1", AccountType.CHECKING, 300, "Mastercard", 0, true));
     }
 
     @Test
@@ -59,7 +59,6 @@ public class AccountServiceTest {
     @Test
     void testDeposit() {
         service.deposit("A1", 200);
-
         AccountModel acc = service.findById("A1");
         assertEquals(700, acc.getBalance());
 
@@ -76,7 +75,6 @@ public class AccountServiceTest {
     @Test
     void testWithdraw() {
         service.withdraw("A2", 100);
-
         AccountModel acc = service.findById("A2");
         assertEquals(200, acc.getBalance());
 
@@ -92,7 +90,46 @@ public class AccountServiceTest {
 
     @Test
     void testWithdrawInsufficientBalance() {
+        // Withdraw more than balance + overdraft limit
         assertThrows(IllegalArgumentException.class,
                 () -> service.withdraw("A2", 500));
+    }
+
+    @Test
+    void testWithdrawWithOverdraftFee() {
+        // Withdraw to make balance negative
+        service.withdraw("A2", 350); // 300 - 350 = -50 → within overdraft limit
+        AccountModel acc = service.findById("A2");
+        assertEquals(-50, acc.getBalance());
+
+        verify(transactionMock, times(1)).addWithdrawLog("A2", 350);
+     }
+
+    @Test
+    void testAccountDeactivationAfterOverdrafts() {
+        // Two overdrafts should deactivate account
+        service.withdraw("A2", 350); // First overdraft
+        service.withdraw("A2", 20);  // Second overdraft → triggers deactivation
+        AccountModel acc = service.findById("A2");
+        assertFalse(acc.isActive());
+
+        // Reactivate after paying fees and clearing negative balance
+        service.deposit("A2", 100);
+        acc = service.findById("A2");
+        assertTrue(acc.isActive());
+    }
+
+    @Test
+    void testTransfer() {
+        // Transfer 200 from A1 to A2
+        service.AmountTransfer("A1", "A2", 200);
+
+        AccountModel accFrom = service.findById("A1");
+        AccountModel accTo = service.findById("A2");
+
+        assertEquals(300, accFrom.getBalance());
+        assertEquals(500, accTo.getBalance());
+
+        verify(transactionMock, times(1)).addTransferLog("A1", "A2", 200);
     }
 }
