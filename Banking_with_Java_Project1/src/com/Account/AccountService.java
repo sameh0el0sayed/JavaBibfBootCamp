@@ -5,6 +5,9 @@ import com.Transaction.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
+
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static org.mockito.Mockito.*;
 
 public class AccountService implements IAccountService{
@@ -12,7 +15,7 @@ public class AccountService implements IAccountService{
     protected FileHelper<AccountModel> fileHelper;
     protected ArrayList<AccountModel> accounts;
     private  String Userid;
-
+    private DebitCardService debitCardService;
     protected TransactionService transactionService;
     public AccountService(String _userID) {
         this.fileHelper = new FileHelper<>(
@@ -22,6 +25,7 @@ public class AccountService implements IAccountService{
         this.accounts = new ArrayList<>();
         this.Userid=_userID;
         this.transactionService=new TransactionService();
+        this.debitCardService=new DebitCardService();
         loadAll();
     }
 
@@ -42,7 +46,7 @@ public class AccountService implements IAccountService{
         return accounts.stream()
                 .filter(a -> a.getAccountId().equals(accountId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("Account not found: " + accountId));
     }
 
     public ArrayList<AccountModel> findByUserId() {
@@ -70,18 +74,24 @@ public class AccountService implements IAccountService{
         return accounts.stream()
                 .filter(a -> a.getUserId().equals(Userid)
                         && a.getAccountType() == AccountType.SAVINGS)
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Savings account not found for user: " + Userid));
+
     }
 
     public AccountModel findCheckingAccount() {
         return accounts.stream()
                 .filter(a -> a.getUserId().equals(Userid)
                         && a.getAccountType() == AccountType.CHECKING)
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Savings account not found for user: " + Userid));
     }
 
     public void deposit(String accountId, double amount) {
         AccountModel acc = findById(accountId);
+        double depositCardLimitation=debitCardService.getCardByType(acc.getCardType()).getDepositLimitPerDay();
+        if (amount>depositCardLimitation)
+            throw new IllegalArgumentException("Deposit Card Limitation");
         if (acc == null)
             throw new IllegalArgumentException("Account not found");
 
@@ -96,9 +106,32 @@ public class AccountService implements IAccountService{
 
     public void withdraw(String accountId, double amount) {
         AccountModel acc = findById(accountId);
+        double withdrawCardLimitation=debitCardService.getCardByType(acc.getCardType()).getWithdrawLimitPerDay();
+        if (amount>withdrawCardLimitation)
+            throw new IllegalArgumentException("Withdraw Card Limitation");
         if (acc == null)
             throw new IllegalArgumentException("Account not found");
+        if (!acc.isActive()) {
+            throw new RuntimeException("Account is deactivated due to overdrafts.");
+        }
+        double balance = acc.getBalance();
 
+        if (balance - amount < 0) {
+            acc.setBalance(balance - amount - 35); // apply $35 overdraft fee
+            acc.setOverdraftCount(acc.getOverdraftCount() + 1);
+
+            System.out.println(RED + "Overdraft! $35 fee applied.");
+
+            // 3️⃣ Deactivate if more than 2 overdrafts
+            if (acc.getOverdraftCount() >= 2) {
+                acc.setActive(false);
+                System.out.println(RED + "Account deactivated due to multiple overdrafts.");
+            }
+
+        } else {
+            // normal withdrawal
+            acc.setBalance(balance - amount);
+        }
         acc.withdraw(amount);
         saveAll();
 
@@ -110,9 +143,14 @@ public class AccountService implements IAccountService{
     public void AmountTransfer(String FromAccountId,String ToAccountId, double amount) {
         AccountModel FromAcc = findById(FromAccountId);
         AccountModel ToAcc = findById(ToAccountId);
+
+        double AmountTransferCardLimitation=debitCardService.getCardByType(FromAcc.getCardType()).getTransferLimitPerDay();
+        if (amount>AmountTransferCardLimitation)
+            throw new IllegalArgumentException("Amount Transfer Card Limitation");
+
         if (FromAcc == null)
             throw new IllegalArgumentException("From Account not found");
-        if (ToAcc == null)
+        else if (ToAcc == null)
             throw new IllegalArgumentException("To Account not found");
         FromAcc.withdraw(amount);
         ToAcc.deposit(amount);
@@ -124,6 +162,28 @@ public class AccountService implements IAccountService{
         );
     }
 
+    public void reactivateAccount(String accountId, double payment) {
+        AccountModel account = findById(accountId);
+        if (account == null) {
+            throw new RuntimeException("Account not found.");
+        }
+
+        if (account.isActive()) {
+            System.out.println(GREEN + "Account is already active.");
+            return;
+        }
+
+        account.setBalance(account.getBalance() + payment); // payment reduces negative balance
+        if (account.getBalance() >= 0) {
+            account.setActive(true);
+            account.setOverdraftCount(0); // reset overdraft counter
+            System.out.println(GREEN + "Account reactivated successfully!");
+        } else {
+            System.out.println(RED + "Payment insufficient. Account still negative.");
+        }
+
+        saveAll();
+    }
 
 
 }

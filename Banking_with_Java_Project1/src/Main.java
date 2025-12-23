@@ -46,13 +46,15 @@ void main() {
                 System.out.println(BLUE+"2-Check my savings account balance");
                 System.out.println(BLUE+"3-Check my checking account balance");
                 System.out.println(BLUE+"4-My Accounts List");
-                System.out.println(BLUE+"5-Make a transfer");
+                System.out.println(BLUE+"5-Make a transfer (choose user first)");
                 System.out.println(BLUE+"6-Withdraw Money");
                 System.out.println(BLUE+"7-Deposit Money");
                 System.out.println(BLUE+"8-Transaction Log");
                 System.out.println(BLUE+"9-Transaction Log with date filter");
                 System.out.println(BLUE+"10-Check Customer Accounts by username");
                 System.out.println(BLUE+"11-Create Account For Me");
+                System.out.println(BLUE + "12-Pay overdraft fee and reactivate account");
+
                 System.out.println(BLUE+"0-Exit");
 
                 switch (scanner.nextLine()) {
@@ -118,25 +120,91 @@ void main() {
 
                         break;
                     case "5":
-                        System.out.println(BLUE+"\n===== Transfer Money =====");
+                        System.out.println(BLUE + "\n===== Transfer Money =====");
 
-                        System.out.print(BLUE+"\nEnter From Account ID: ");
-                        String fromId = scanner.nextLine();
+                         System.out.print(BLUE + "\nEnter the username of the user to transfer from: ");
+                        String transferUserName = scanner.nextLine();
 
-                        System.out.print(BLUE+"\nEnter To Account ID: ");
-                        String toId = scanner.nextLine();
+                        CustomerModel transferCustomer = customerService.findByUsername(transferUserName);
+                        if (transferCustomer == null) {
+                            System.out.println(RED + "User not found.");
+                            break;
+                        }
 
-                        System.out.print(BLUE+"\nEnter Amount: ");
-                        double amt = Double.parseDouble(scanner.nextLine());
+                         AccountService transferAccountService = new AccountService(transferCustomer.getId());
+                        ArrayList<AccountModel> userAccounts = transferAccountService.findByUserId();
+
+                        if (userAccounts.isEmpty()) {
+                            System.out.println(RED + "This user has no accounts to transfer from.");
+                            break;
+                        }
+
+                         System.out.println(BLUE + "\nSelect FROM account:");
+                        for (int i = 0; i < userAccounts.size(); i++) {
+                            AccountModel acc = userAccounts.get(i);
+                            System.out.println(
+                                    BLUE + (i + 1) + ") " +
+                                            acc.getAccountId() +
+                                            " | " + acc.getAccountType()
+                            );
+                        }
+
+                         System.out.print(BLUE + "\nEnter choice number: ");
+                        int choice;
+                        try {
+                            choice = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println(RED + "Invalid input.");
+                            break;
+                        }
+
+                        if (choice < 1 || choice > userAccounts.size()) {
+                            System.out.println(RED + "Invalid selection.");
+                            break;
+                        }
+
+                        AccountModel fromAccount = userAccounts.get(choice - 1);
+
+                         System.out.print(BLUE + "\nEnter TO Account ID: ");
+                        String toAccountId = scanner.nextLine();
+
+                         System.out.print(BLUE + "\nEnter Amount: ");
+                        double amount;
+                        try {
+                            amount = Double.parseDouble(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println(RED + "Invalid amount.");
+                            break;
+                        }
 
                         try {
-                            accountService.AmountTransfer(fromId, toId, amt);
-                            System.out.println(GREEN+"Transfer successful!");
+                            transferAccountService.AmountTransfer(fromAccount.getAccountId(), toAccountId, amount);
+                            System.out.println(GREEN + "Transfer successful!");
                         } catch (Exception ex) {
-                            System.out.println(RED+"Transfer failed: " + ex.getMessage());
+                            System.out.println(RED + "Transfer failed: " + ex.getMessage());
                         }
                         break;
 
+//                    case "5":
+//                        System.out.println(BLUE+"\n===== Transfer Money =====");
+//
+//                        System.out.print(BLUE+"\nEnter From Account ID: ");
+//                        String fromId = scanner.nextLine();
+//
+//                        System.out.print(BLUE+"\nEnter To Account ID: ");
+//                        String toId = scanner.nextLine();
+//
+//                        System.out.print(BLUE+"\nEnter Amount: ");
+//                        double amt = Double.parseDouble(scanner.nextLine());
+//
+//                        try {
+//                            accountService.AmountTransfer(fromId, toId, amt);
+//                            System.out.println(GREEN+"Transfer successful!");
+//                        } catch (Exception ex) {
+//                            System.out.println(RED+"Transfer failed: " + ex.getMessage());
+//                        }
+//                        break;
+//
 
                     case "6":
                         System.out.println(RED+"\n===== Withdraw Money =====");
@@ -190,7 +258,8 @@ void main() {
                                 );
                             }
                         }
-
+                        String pdfPath = "D:\\temp\\generateTransactionPDF.pdf";
+                        PDFUtil.generateTransactionPDF(myTrans, pdfPath);
                         break;
                     case "9":
                         TransactionService FtransactionService =new TransactionService();
@@ -268,17 +337,40 @@ void main() {
 
                                 break;
                         }
+                        System.out.print(BLUE+"\nType What the debit card type name:");
+                        System.out.print(BLUE+"\nMastercard Platinum");
+                        System.out.print(BLUE+"\nMastercard Titanium");
+                        System.out.print(BLUE+"\nMastercard\n");
+                        String cardType = scanner.nextLine();
+
                         AccountModel accountModel=new AccountModel(
                                 "A"+1000 + new java.util.Random().nextInt(1000),
                                 customer.getId(),
                                 acctype,
-                                0
+                                0,
+                                cardType,
+                                0,
+                                true
                         );
                         accountService.create(accountModel);
                         System.out.println(GREEN+"Account Creation successful!");
 
 
                         break;
+                    case "12":
+                        System.out.print(BLUE + "\nEnter Account ID: ");
+                        String odaccId = scanner.nextLine();
+
+                        System.out.print(BLUE + "\nEnter payment amount: ");
+                        double payment = Double.parseDouble(scanner.nextLine());
+
+                        try {
+                            accountService.reactivateAccount(odaccId, payment);
+                        } catch (Exception e) {
+                            System.out.println(RED + "Error: " + e.getMessage());
+                        }
+                        break;
+
                     case "0":
                         System.out.println(BLUE+"Goodbye!");
                         running = false;
@@ -292,7 +384,7 @@ void main() {
             break; // login successful, exit loop
         } else {
             attempts--;
-            System.out.println(RED+"Password is not correct. Attempts left: " + attempts);
+            System.out.println(RED+"User not found. Attempts left: " + attempts);
             if (attempts == 0) {
                 System.out.println(RED+"Login failed. Account is locked for 1 min");
             }

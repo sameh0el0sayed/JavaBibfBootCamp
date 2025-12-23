@@ -1,10 +1,9 @@
-package com.UnitTest;
+package com;
 
 
 import com.Account.AccountModel;
 import com.Account.AccountService;
 import com.Account.AccountType;
-import com.FileHelper;
 import com.Transaction.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +36,8 @@ public class AccountServiceTest {
         };
 
         // Create sample accounts
-        service.create(new AccountModel("A1", "U1", AccountType.SAVINGS, 500));
-        service.create(new AccountModel("A2", "U1", AccountType.CHECKING, 300));
+        service.create(new AccountModel("A1", "U1", AccountType.SAVINGS, 500,"Mastercard Titanium",0,true));
+        service.create(new AccountModel("A2", "U1", AccountType.CHECKING, 300,"Mastercard",0,false));
     }
 
     @Test
