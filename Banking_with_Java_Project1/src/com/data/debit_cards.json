@@ -17,7 +17,7 @@
   },
   {
     "type": "Mastercard",
-    "withdrawLimitPerDay": 5000,
+    "withdrawLimitPerDay": 100000,
     "transferLimitPerDay": 10000,
     "transferLimitPerDayOwnAccount": 20000,
     "depositLimitPerDay": 100000,

@@ -1,60 +1,51 @@
 package com.ga.springbootAPI.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+//import lombok.Getter;
+//import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
-
     @Id
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter @Setter private Long id;
 
-    private String name;
-    private String description;
-    private LocalDateTime createdAt;
+    @Column
+    @Getter @Setter private String name;
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    @Column
+    @Getter @Setter private String description;
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    @Getter @Setter private List<Recipe> recipeList;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    @Column
+    @CreationTimestamp
+    @Getter @Setter private LocalDateTime createdAt;
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
+    @Column
+    @UpdateTimestamp
+    @Getter
+    @Setter
     private LocalDateTime updatedAt;
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    @Getter
+    @Setter
+    private User user;
 }
