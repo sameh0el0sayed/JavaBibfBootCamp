@@ -29,7 +29,7 @@ public class ItemService {
     }
 
 
-    public  Item getItemByIdByCategoryId(Long Id,Long categoryId){
+    public  Item getItemByIdByCategoryId(Long categoryId,Long Id){
         return itemRepository.findById(Id).filter(f->f.getCategory().getId().equals(categoryId)).orElse(null);
     }
     public Item CreateItem(Long categoryId,Item model){
@@ -58,8 +58,8 @@ public class ItemService {
         updateItem.setCategory(newCategory);
         return itemRepository.save(updateItem);
     }
-    public Item UpdateItemWithCategoryId(Item model,Long categoryId){
-        Item updateItem= getItemById(model.getId());
+    public Item UpdateItemWithCategoryId(Item model,Long categoryId,Long itemId){
+        Item updateItem= getItemById(itemId);
         Category newCategory=categoryService.getCategoryById(categoryId);
         updateItem.setName(model.getName());
         updateItem.setDescription(model.getDescription());
@@ -67,7 +67,7 @@ public class ItemService {
         updateItem.setCategory(newCategory);
         return itemRepository.save(updateItem);
     }
-    public void DeleteItemWithCategoryId(Long ItemId,Long categoryId){
+    public void DeleteItemWithCategoryId(Long categoryId,Long ItemId){
     Item itemByIdByCategoryId= getItemByIdByCategoryId(ItemId,categoryId);
         itemRepository.delete(itemByIdByCategoryId);
     }

@@ -30,6 +30,7 @@ public class Category {
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    @JsonIgnore
     private List<Item> itemList;
 
     @Column
@@ -38,13 +39,11 @@ public class Category {
 
     @Column
     @UpdateTimestamp
-
     private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
-
     private User user;
 
     public Long getId() {

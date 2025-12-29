@@ -1,6 +1,7 @@
 package com.ga.TodoAPIHW.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 public class Item {
 
     @Id
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -17,8 +19,9 @@ public class Item {
     private String description;
     private Date dueDate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_Id")
+    @JsonIgnore
     private Category category;
 
     public Long getId() {
