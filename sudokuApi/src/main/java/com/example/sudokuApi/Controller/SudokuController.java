@@ -1,5 +1,6 @@
 package com.example.sudokuApi.Controller;
 
+import com.example.sudokuApi.Exception.SudokuFileNotFoundException;
 import com.example.sudokuApi.Model.Sudoku;
 import com.example.sudokuApi.Solver.SudokuSolver;
 import com.example.sudokuApi.SudokuFileParser;
@@ -17,41 +18,44 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class SudokuController {
+
     @PostMapping("/SolveSodoku")
     public ResponseEntity<String> SolveSodoku(
-            @RequestParam("file") MultipartFile file
-            ,@RequestParam("outputFile") String outputFile) throws IOException {
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("outputFile") String outputFile
+    ) throws IOException {
 
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("File is empty");
+        if (file == null || file.isEmpty()) {
+            throw new SudokuFileNotFoundException("Sudoku game file was not provided");
         }
 
-        // Read file content
         String content = new String(
                 file.getBytes(),
                 StandardCharsets.UTF_8
         );
 
-        List<int[][]> puzzles= SudokuFileParser.parseSudokuFile(content);
+        List<int[][]> puzzles = SudokuFileParser.parseSudokuFile(content);
         StringBuilder sb = new StringBuilder();
 
         for (int p = 0; p < puzzles.size(); p++) {
-            int[][] grid = puzzles.get(p);
-            Sudoku sudoku = new Sudoku(grid);
+
+            Sudoku sudoku = new Sudoku(puzzles.get(p));
             SudokuSolver solver = new SudokuSolver();
 
-            sb.append("\nPuzzle "+(p+1));
+            sb.append("\nPuzzle ").append(p + 1).append(":\n\n");
             sb.append(sudoku.printBoard());
 
             if (solver.solve(sudoku)) {
-                sb.append("\nSolved Sudoku "+(p+1)+":");
+                sb.append("\nSolved Sudoku ").append(p + 1).append(":\n\n");
                 sb.append(sudoku.printBoard());
             } else {
-                sb.append("No solution found.");
+                sb.append("\nNo solution found.");
             }
         }
-        Path outputPath = Path.of( outputFile);
+
+        Path outputPath = Path.of(outputFile);
         Files.createDirectories(outputPath.getParent());
+
         Files.writeString(
                 outputPath,
                 sb.toString(),
@@ -59,6 +63,7 @@ public class SudokuController {
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING
         );
+
         return ResponseEntity.ok(sb.toString());
     }
 }

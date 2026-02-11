@@ -1,6 +1,7 @@
 package com.example.sudokuApi.Model;
 
 
+import com.example.sudokuApi.Exception.InvalidCharacterException;
 import com.example.sudokuApi.Exception.InvalidMoveException;
 import com.example.sudokuApi.Exception.InvalidSudokuException;
 
@@ -22,7 +23,10 @@ public class Sudoku {
             for (int col = 0; col < SIZE; col++) {
                 int value = input[row][col];
                 if (value < 0 || value > 9) {
-                    throw new InvalidSudokuException("Values must be between 0 and 9");
+                    throw new InvalidCharacterException(
+                            "Invalid character value '" + value +
+                                    "' at position [" + row + "," + col + "]"
+                    );
                 }
                 board[row][col] = new SudokuCell(value);
             }
@@ -80,7 +84,7 @@ public class Sudoku {
         for (int row = 0; row < SIZE; row++) {
 
              if (row % 3 == 0) {
-                result.append("\n+-------+-------+-------+\n");
+                result.append("+-------+-------+-------+\n");
             }
 
             for (int col = 0; col < SIZE; col++) {
