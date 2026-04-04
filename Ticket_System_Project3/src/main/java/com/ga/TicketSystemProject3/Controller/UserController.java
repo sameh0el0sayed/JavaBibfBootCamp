@@ -3,6 +3,8 @@ package com.ga.TicketSystemProject3.Controller;
 
 import com.ga.TicketSystemProject3.Model.Image;
 import com.ga.TicketSystemProject3.Model.User;
+import com.ga.TicketSystemProject3.Model.request.ChangePasswordRequest;
+import com.ga.TicketSystemProject3.Model.request.ImageRequest;
 import com.ga.TicketSystemProject3.Model.request.LoginRequest;
 import com.ga.TicketSystemProject3.Service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,7 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
     @PutMapping("/set-image")
-    public User setImage(Image image){
+    public User setImage(@ModelAttribute ImageRequest image){
         System.out.println("calling set image in controller ========>");
         return userService.setUserImage(image);
     }
@@ -45,7 +47,7 @@ public class UserController {
         System.out.println("calling reset in controller ========>");
         userService.resetPassword(user.getEmailAddress());
     }
-    @PostMapping("/reset-password")
+    @PostMapping("/reset-password-activator")
     public void passwordResetActivator(@RequestBody User user ,@RequestParam String token){
         System.out.println("calling reset activator in controller ========>");
         userService.resetPasswordActivator(token,user);
@@ -55,8 +57,13 @@ public class UserController {
     public void changePassword(@RequestBody ChangePasswordRequest request){
         System.out.println("calling change password in controller ========>");
         userService.changePassword(request.getOldPass(), request.getNewPass() );
+    }
+    @GetMapping("/register/verify")
+    public void validate(@RequestParam String token){
+        System.out.println("calling change password in controller ========>");
+        userService.validate(token);
+        System.out.println("blahblah");
         //userService.resetPassword(user.getEmailAddress());
     }
-     
 
 }

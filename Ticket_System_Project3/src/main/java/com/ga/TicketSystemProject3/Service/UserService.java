@@ -2,6 +2,7 @@ package com.ga.TicketSystemProject3.Service;
 
 
 import com.ga.TicketSystemProject3.Exception.InformationExistException;
+import com.ga.TicketSystemProject3.Mail.EmailService;
 import com.ga.TicketSystemProject3.Model.Image;
 import com.ga.TicketSystemProject3.Model.SecureToken;
 import com.ga.TicketSystemProject3.Model.User;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.MissingPathVariableException;
 
 @Service
 public class UserService {
@@ -32,13 +34,14 @@ public class UserService {
     private  final ImageService imageService;
     private  final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
+    private  final EmailService emailService;
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
 
     @Autowired
     public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, SecureTokenService secureTokenService, ImageService imageService, ImageRepository imageRepository,
-                       @Lazy PasswordEncoder passwordEncoder,
+                       @Lazy PasswordEncoder passwordEncoder, EmailService emailService,
                        JWTUtils jwtUtils,
                        @Lazy AuthenticationManager authenticationManager,
                        @Lazy MyUserDetails myUserDetails) {
@@ -48,6 +51,7 @@ public class UserService {
         this.imageService = imageService;
         this.imageRepository = imageRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
@@ -56,6 +60,11 @@ public class UserService {
         System.out.println("Service Calling createUser ==> ");
         if(!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
+            emailService.sendEmail(
+                    userObject.getEmailAddress(),
+                    "Welcome "+userObject.getUserName(),
+                    "Welcome to ower system"
+            );
             return userRepository.save(userObject);
         }
         else
@@ -84,7 +93,7 @@ public class UserService {
     }
     public User setUserImage(ImageRequest image) {
         User user = getUser();
-        System.out.println("fouuuuuuuund===" + user);
+        System.out.println("found===" + user);
         String imgUrl = imageService.uploadImage(image, "usersImages");
         Image savedImage = imageRepository.findByUrl(imgUrl);
         user.getUserProfile().setImage(savedImage);
@@ -108,8 +117,21 @@ public class UserService {
          userRepository.save(user);
     }
 
+    public void sendConfirmationEmail(User user) {
+        SecureTokenService secureTokenService = null;
+        SecureToken secureToken = secureTokenService.createToken();
+        secureToken.setUser(user);
+        secureTokenService.saveSecureToken(secureToken);
 
-    public SecureToken resetPassword(String email) {
+        System.out.println("sending email to " + user.getEmailAddress());
+        emailService.sendEmail(
+                user.getEmailAddress(),
+                "Reset Password",
+                "Click here to reset your password: " + secureToken.getToken()
+        );
+    }
+
+    public void resetPassword(String email) {
         SecureToken secureToken = secureTokenService.createToken();
         User user = userRepository.findUserByEmailAddress(email);
         System.out.println("service found user ====> " + user.getUserName());
@@ -118,7 +140,11 @@ public class UserService {
 
 
         System.out.println("sending email to " + user.getEmailAddress());
-       return secureToken;
+        emailService.sendEmail(
+                user.getEmailAddress(),
+                "Reset Password",
+                "Click here to reset your password: " + secureToken.getToken()
+        );
     }
 
     public void resetPasswordActivator(String token, User userObj) {
@@ -134,11 +160,9 @@ public class UserService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
-        System.out.println("the useeeer");
+        System.out.println("the user");
         User user = myUserDetails.getUser();
-        if (newPass == null) {
-            throw new MissingFieldException("New password must not be null");
-        }
+
         try {
             if (passwordEncoder.matches(oldPass, user.getPassword())) {
 
@@ -151,4 +175,10 @@ public class UserService {
 
     }
 
+    public void validate(String token) {
+        SecureToken secureToken = secureTokenService.findByToken(token);
+        User user = secureToken.getUser();
+        user.setActivated(true);
+        userRepository.save(user);
+    }
 }
