@@ -97,11 +97,9 @@ public class UserService {
         String imgUrl = imageService.uploadImage(image, "usersImages");
         Image savedImage = imageRepository.findByUrl(imgUrl);
         user.getUserProfile().setImage(savedImage);
-
+        userRepository.save(user);
 
         return user;
-
-
     }
     public User getUser() {
         // return the user object from the user details object from the security context holder
@@ -117,19 +115,19 @@ public class UserService {
          userRepository.save(user);
     }
 
-    public void sendConfirmationEmail(User user) {
-        SecureTokenService secureTokenService = null;
-        SecureToken secureToken = secureTokenService.createToken();
-        secureToken.setUser(user);
-        secureTokenService.saveSecureToken(secureToken);
-
-        System.out.println("sending email to " + user.getEmailAddress());
-        emailService.sendEmail(
-                user.getEmailAddress(),
-                "Reset Password",
-                "Click here to reset your password: " + secureToken.getToken()
-        );
-    }
+//    public void sendConfirmationEmail(User user) {
+//        SecureTokenService secureTokenService = null;
+//        SecureToken secureToken = secureTokenService.createToken();
+//        secureToken.setUser(user);
+//        secureTokenService.saveSecureToken(secureToken);
+//
+//        System.out.println("sending email to " + user.getEmailAddress());
+//        emailService.sendEmail(
+//                user.getEmailAddress(),
+//                "Reset Password",
+//                "Click here to reset your password: " + secureToken.getToken()
+//        );
+//    }
 
     public void resetPassword(String email) {
         SecureToken secureToken = secureTokenService.createToken();
@@ -175,10 +173,10 @@ public class UserService {
 
     }
 
-    public void validate(String token) {
-        SecureToken secureToken = secureTokenService.findByToken(token);
-        User user = secureToken.getUser();
-        user.setActivated(true);
-        userRepository.save(user);
-    }
+//    public void validate(String token) {
+//        SecureToken secureToken = secureTokenService.findByToken(token);
+//        User user = secureToken.getUser();
+//        user.setActivated(true);
+//        userRepository.save(user);
+//    }
 }

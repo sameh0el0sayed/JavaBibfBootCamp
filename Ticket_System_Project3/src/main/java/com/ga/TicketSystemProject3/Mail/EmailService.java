@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender mailSender;
-    private final MailConfig mailConfig; // inject MailConfig to get "from" email
+    private final MailConfig mailConfig; 
 
     public EmailService(JavaMailSender mailSender, MailConfig mailConfig) {
         this.mailSender = mailSender;

@@ -51,19 +51,18 @@ public class UserController {
     public void passwordResetActivator(@RequestBody User user ,@RequestParam String token){
         System.out.println("calling reset activator in controller ========>");
         userService.resetPasswordActivator(token,user);
-        //userService.resetPassword(user.getEmailAddress());
     }
     @PutMapping("/change-password")
     public void changePassword(@RequestBody ChangePasswordRequest request){
         System.out.println("calling change password in controller ========>");
         userService.changePassword(request.getOldPass(), request.getNewPass() );
     }
-    @GetMapping("/register/verify")
-    public void validate(@RequestParam String token){
-        System.out.println("calling change password in controller ========>");
-        userService.validate(token);
-        System.out.println("blahblah");
-        //userService.resetPassword(user.getEmailAddress());
-    }
+//    @GetMapping("/register/verify")
+//    public void validate(@RequestParam String token){
+//        System.out.println("calling change password in controller ========>");
+//        userService.validate(token);
+//        System.out.println("blahblah");
+//        //userService.resetPassword(user.getEmailAddress());
+//    }
 
 }
