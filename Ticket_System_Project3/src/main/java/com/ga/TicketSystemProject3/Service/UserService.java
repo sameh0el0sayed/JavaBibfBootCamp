@@ -3,13 +3,11 @@ package com.ga.TicketSystemProject3.Service;
 
 import com.ga.TicketSystemProject3.Exception.InformationExistException;
 import com.ga.TicketSystemProject3.Mail.EmailService;
-import com.ga.TicketSystemProject3.Model.Image;
-import com.ga.TicketSystemProject3.Model.SecureToken;
-import com.ga.TicketSystemProject3.Model.User;
-import com.ga.TicketSystemProject3.Model.UserProfile;
+import com.ga.TicketSystemProject3.Model.*;
 import com.ga.TicketSystemProject3.Model.request.ImageRequest;
 import com.ga.TicketSystemProject3.Model.request.LoginRequest;
 import com.ga.TicketSystemProject3.Model.response.LoginResponse;
+import com.ga.TicketSystemProject3.Repository.CounterRepository;
 import com.ga.TicketSystemProject3.Repository.ImageRepository;
 import com.ga.TicketSystemProject3.Repository.UserProfileRepository;
 import com.ga.TicketSystemProject3.Repository.UserRepository;
@@ -38,13 +36,13 @@ public class UserService {
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
-
+    private  final CounterRepository counterRepository;
     @Autowired
     public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, SecureTokenService secureTokenService, ImageService imageService, ImageRepository imageRepository,
                        @Lazy PasswordEncoder passwordEncoder, EmailService emailService,
                        JWTUtils jwtUtils,
                        @Lazy AuthenticationManager authenticationManager,
-                       @Lazy MyUserDetails myUserDetails) {
+                       @Lazy MyUserDetails myUserDetails, CounterRepository counterRepository) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.secureTokenService = secureTokenService;
@@ -55,11 +53,19 @@ public class UserService {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
+        this.counterRepository = counterRepository;
     }
     public User createUser(User userObject){
         System.out.println("Service Calling createUser ==> ");
         if(!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
+
+            if (userObject.getRole()== UserRole.USER){
+                Counter counter=new Counter();
+                counter.setStatus(CounterStatus.WORKING);
+                counterRepository.save(counter);
+                userObject.setCounter(counter);
+            }
             emailService.sendEmail(
                     userObject.getEmailAddress(),
                     "Welcome "+userObject.getUserName(),

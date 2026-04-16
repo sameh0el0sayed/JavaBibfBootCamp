@@ -1,5 +1,6 @@
 package com.ga.TicketSystemProject3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jdk.jshell.execution.LocalExecutionControl;
 
@@ -20,6 +21,7 @@ public class ServiceType {
     private LocalTime avg_service_time;
 
     @OneToMany(mappedBy = "serviceType", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Ticket> ticketList;
 
     public Long getId() {

@@ -1,6 +1,5 @@
 package com.ga.TicketSystemProject3.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,8 +12,8 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long ticket_number;
+    @Column(name = "ticket_number")
+    private Long ticketNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -27,19 +26,19 @@ public class Ticket {
     private LocalDateTime called_at;
 
     @OneToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "queue_id", referencedColumnName = "id")
     private Queue queue;
 
     @OneToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "counter_id", referencedColumnName = "id")
     private Counter counter;
 
-    @OneToOne(
-            fetch = FetchType.LAZY
+    @ManyToOne(
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "serviceType_id", referencedColumnName = "id")
     private ServiceType serviceType;
@@ -53,11 +52,11 @@ public class Ticket {
     }
 
     public Long getTicket_number() {
-        return ticket_number;
+        return ticketNumber;
     }
 
     public void setTicket_number(Long ticket_number) {
-        this.ticket_number = ticket_number;
+        this.ticketNumber = ticket_number;
     }
 
     public TicketStatus getStatus() {
@@ -107,5 +106,7 @@ public class Ticket {
     public void setServiceType(ServiceType serviceType) {
         this.serviceType = serviceType;
     }
+
+
 
 }

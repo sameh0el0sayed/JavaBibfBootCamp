@@ -48,8 +48,8 @@ public class SecurityConfiguration {
                                 "/auth/users/register"
                         )
                         .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/tickets/**").hasRole("USER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/tickets/**").permitAll()
 
                         .anyRequest()
                         .authenticated()

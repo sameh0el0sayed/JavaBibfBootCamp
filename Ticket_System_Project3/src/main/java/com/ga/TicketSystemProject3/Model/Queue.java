@@ -1,5 +1,6 @@
 package com.ga.TicketSystemProject3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,8 +19,10 @@ public class Queue {
 
     @OneToOne(
             fetch = FetchType.LAZY
+            ,cascade = CascadeType.REFRESH
     )
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    @JsonIgnore
     private Ticket ticket;
 
     public Ticket getTicket() {

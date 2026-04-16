@@ -1,11 +1,9 @@
 package com.ga.TicketSystemProject3.Model;
 
 public enum TicketStatus {
-    OPEN,
-    IN_PROGRESS,
-    RESOLVED,
+    CALLED,
+    WAITING,
     CLOSED,
     REOPENED,
-    ON_HOLD,
     CANCELLED
 }

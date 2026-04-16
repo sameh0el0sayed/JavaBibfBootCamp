@@ -1,5 +1,6 @@
 package com.ga.TicketSystemProject3.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,12 +14,15 @@ public class Counter {
     private Long id;
 
 
-    @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CounterStatus status;
 
     @OneToOne(mappedBy = "counter", fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
     @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Ticket> ticketList;
     public Long getId() {
         return id;
@@ -28,11 +32,11 @@ public class Counter {
         this.id = id;
     }
 
-    public String getStatus() {
+    public CounterStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CounterStatus status) {
         this.status = status;
     }
 
@@ -42,5 +46,13 @@ public class Counter {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Ticket> getTicketList() {
+        return ticketList;
+    }
+
+    public void setTicketList(List<Ticket> ticketList) {
+        this.ticketList = ticketList;
     }
 }

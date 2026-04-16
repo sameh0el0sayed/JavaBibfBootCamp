@@ -57,12 +57,6 @@ public class UserController {
         System.out.println("calling change password in controller ========>");
         userService.changePassword(request.getOldPass(), request.getNewPass() );
     }
-//    @GetMapping("/register/verify")
-//    public void validate(@RequestParam String token){
-//        System.out.println("calling change password in controller ========>");
-//        userService.validate(token);
-//        System.out.println("blahblah");
-//        //userService.resetPassword(user.getEmailAddress());
-//    }
+
 
 }
