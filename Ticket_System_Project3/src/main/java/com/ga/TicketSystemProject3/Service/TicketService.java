@@ -85,8 +85,7 @@ public class TicketService {
         }
     }
     public List<Ticket> getAllTickets(){
-        return ticketRepository.findAll().stream()
-                .filter(t->t.getStatus()!=TicketStatus.CANCELLED).toList();
+        return ticketRepository.findAll().stream().toList();
     }
 
     public Ticket getTicketById(Long id) {
@@ -133,10 +132,14 @@ public class TicketService {
     }
 
     public Ticket reopenTicket(Long id) {
+
         Ticket ticket = getTicketById(id);
         ticket.setStatus(TicketStatus.REOPENED);
-        Counter counter=counterRepository.findAll().stream().filter(t-> Objects.equals(t.getStatus(), "WORKING")).findFirst().orElse(null);
-        ticket.setCounter(counter);
+        Counter counter = counterRepository.findAll()
+                .stream()
+                .filter(c -> c.getStatus() == CounterStatus.WORKING)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No working counter"));        ticket.setCounter(counter);
         return ticketRepository.save(ticket);
     }
 

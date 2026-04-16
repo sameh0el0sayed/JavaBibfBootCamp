@@ -34,7 +34,7 @@ public class TicketController {
     public ResponseEntity<Ticket> reopenTicket(@PathVariable Long id) {
         return ResponseEntity.ok(ticketService.reopenTicket(id));
     }
-    @PutMapping("/{id}")
+    @PutMapping("/update")
     public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket updatedTicket) {
         return ResponseEntity.ok(ticketService.updateTicket(updatedTicket));
     }

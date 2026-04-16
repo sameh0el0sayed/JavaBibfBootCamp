@@ -17,16 +17,15 @@ public class AdminController {
         this.ticketService = ticketService;
     }
 
-
-    @GetMapping("/ticket/getAll")
+    @GetMapping("/tickets/getAll")
     public ResponseEntity<List<Ticket>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
-    @GetMapping("/ticket/{id}")
+    @GetMapping("/tickets/{id}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
         return ResponseEntity.ok(ticketService.getTicketById(id));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/tickets/{id}")
     public ResponseEntity<String> deleteTicket(@PathVariable Long id) {
         ticketService.softDeleteTicket(id);
         return ResponseEntity.ok("Ticket soft deleted successfully");

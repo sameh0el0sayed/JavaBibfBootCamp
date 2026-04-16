@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                         )
                         .permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/tickets/**").permitAll()
+                        .requestMatchers("/api/tickets/**").hasRole("USER")
 
                         .anyRequest()
                         .authenticated()
