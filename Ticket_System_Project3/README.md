@@ -48,7 +48,16 @@ Basic error handling was implemented, but comprehensive validation (e.g., invali
 |GET|/auth/users/reset-password|User reset password|Public|ALL
 |Post|/auth/users/reset-password-activator|User reset password validation|Public|ALL
 |PUT|/auth/users/change-password|User **change** password|Public|ALL
- 
+|DELETE|/api/admin/users/softDelete|User soft delete|Privete|ADMIN
+|GET|/api/admin/tickets/getAll|Get all tickets|Privete|ADMIN
+|GET|/api/admin/tickets/{id}|Get ticket by id|Privete|ADMIN
+|DELETE|/api/admin/tickets/{id}|Ticket soft delete|Privete|ADMIN
+|POST|/api/tickets/create|Create a ticket|Privete|USER
+|GET|/api/tickets/next|Get and assigne to counter the next ticket|Privete|USER
+|PUT|/api/tickets/{id}/close|Close the ticket and remove from the queue and counter|Privete|USER
+|PUT|/api/tickets/{id}/reopen|Ticket reopen|Privete|USER
+|PUT|/api/tickets/update|Update ticket with status and service type|Privete|USER
+
 ---
 
 ### Link of the project
@@ -61,3 +70,19 @@ https://drawsql.app/teams/sameh-4/diagrams/ticket-system
 ```bash
 https://github.com/sameh0el0sayed/JavaBibfBootCamp/blob/master/Ticket_System_Project3/Planning%20documentation.docx
 ```
+
+### Dependencies
+- Spring Boot Starter Web (3.2.0)
+- Spring Boot DevTools (3.2.0)
+- Spring Boot Starter Data JPA (3.2.0)
+- PostgreSQL Driver (42.7.3)
+- JJWT API (0.11.5)
+- JJWT Impl (0.11.5)
+- JJWT Jackson (0.11.5)
+- Lombok (1.18.30)
+- Spring Boot Starter Security (3.2.0)
+- Cloudinary HTTP5 (2.0.0)
+- Cloudinary Taglib (2.0.0)
+- Spring Boot Starter Mail (3.2.0)
+- Spring Boot Starter Thymeleaf (3.2.0)
+- Apache Commons Lang3 (3.14.0)
