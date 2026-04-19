@@ -37,11 +37,7 @@ public class UserController {
         System.out.println("calling set image in controller ========>");
         return userService.setUserImage(image);
     }
-    @DeleteMapping("/softDelete")
-    public void softDelete(){
-        System.out.println("calling soft delete user in user controller ========>");
-        userService.softDelete();
-    }
+
     @GetMapping("/reset-password")
     public void passwordReset(@RequestBody User user){
         System.out.println("calling reset in controller ========>");

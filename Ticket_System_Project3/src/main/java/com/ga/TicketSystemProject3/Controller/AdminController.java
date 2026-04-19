@@ -3,6 +3,7 @@ package com.ga.TicketSystemProject3.Controller;
 
 import com.ga.TicketSystemProject3.Model.Ticket;
 import com.ga.TicketSystemProject3.Service.TicketService;
+import com.ga.TicketSystemProject3.Service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +13,18 @@ import java.util.List;
 @RequestMapping("/api/admin")
 public class AdminController {
     private final TicketService ticketService;
+    private final UserService userService;
 
-    public AdminController(TicketService ticketService) {
+    public AdminController(TicketService ticketService, UserService userService) {
         this.ticketService = ticketService;
+        this.userService = userService;
     }
-
+    
+    @DeleteMapping("/users/softDelete")
+    public void softDelete(){
+        System.out.println("calling soft delete user in user controller ========>");
+        userService.softDelete();
+    }
     @GetMapping("/tickets/getAll")
     public ResponseEntity<List<Ticket>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
