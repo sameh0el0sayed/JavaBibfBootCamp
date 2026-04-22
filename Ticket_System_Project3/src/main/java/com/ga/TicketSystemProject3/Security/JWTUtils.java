@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,11 +17,16 @@ public class JWTUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(MyUserDetails myUserDetails) {
+        List<String> roles = myUserDetails.getAuthorities()
+                .stream()
+                .map(auth -> auth.getAuthority())
+                .toList();
+
         return Jwts.builder()
-                .setSubject((myUserDetails.getUsername()))
-                .claim("role", myUserDetails.getUser().getRole())
+                .setSubject(myUserDetails.getUsername())
+                .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }

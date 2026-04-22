@@ -94,7 +94,8 @@ public class UserService {
             final String JWT = jwtUtils.generateJwtToken(myUserDetails);
             return ResponseEntity.ok(new LoginResponse(JWT));
         }catch (Exception e){
-            return ResponseEntity.ok(new LoginResponse("Error : username or password is incorrect"));
+            throw new RuntimeException(e);
+            //return ResponseEntity.ok(new LoginResponse("Error : username or password is incorrect"));
         }
     }
     public User setUserImage(ImageRequest image) {
