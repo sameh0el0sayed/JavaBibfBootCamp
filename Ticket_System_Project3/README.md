@@ -61,7 +61,10 @@ Basic error handling was implemented, but comprehensive validation (e.g., invali
 ---
 
 ### Link of the project
-  
+**User Flow diagram**
+```bash
+https://github.com/sameh0el0sayed/JavaBibfBootCamp/blob/master/Ticket_System_Project3/diagram-export-4-19-2026-8_01_34-PM.png
+  ```
 **ERD diagram**
 ```bash
 https://drawsql.app/teams/sameh-4/diagrams/ticket-system
