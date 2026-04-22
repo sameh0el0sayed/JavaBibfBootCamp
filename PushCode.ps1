@@ -9,6 +9,7 @@ $repoUrl = git remote get-url origin
 # Commit message
 $msg = "HW (Week $weekOfMonth) ($todayFormatted)"
 
+git pull
 git add .
 git commit -m "$msg"
 git push
