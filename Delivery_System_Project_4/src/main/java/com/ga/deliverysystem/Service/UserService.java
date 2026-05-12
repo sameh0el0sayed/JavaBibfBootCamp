@@ -1,18 +1,19 @@
-package com.ga.TicketSystemProject3.Service;
+package com.ga.deliverysystem.Service;
 
 
-import com.ga.TicketSystemProject3.Exception.InformationExistException;
-import com.ga.TicketSystemProject3.Mail.EmailService;
-import com.ga.TicketSystemProject3.Model.*;
-import com.ga.TicketSystemProject3.Model.request.ImageRequest;
-import com.ga.TicketSystemProject3.Model.request.LoginRequest;
-import com.ga.TicketSystemProject3.Model.response.LoginResponse;
-import com.ga.TicketSystemProject3.Repository.CounterRepository;
-import com.ga.TicketSystemProject3.Repository.ImageRepository;
-import com.ga.TicketSystemProject3.Repository.UserProfileRepository;
-import com.ga.TicketSystemProject3.Repository.UserRepository;
-import com.ga.TicketSystemProject3.Security.JWTUtils;
-import com.ga.TicketSystemProject3.Security.MyUserDetails;
+import com.ga.deliverysystem.Dto.request.ImageRequest;
+import com.ga.deliverysystem.Dto.request.LoginRequest;
+import com.ga.deliverysystem.Dto.response.LoginResponse;
+import com.ga.deliverysystem.Exception.InformationExistException;
+import com.ga.deliverysystem.Model.Enum.UserRole;
+import com.ga.deliverysystem.Model.Image;
+import com.ga.deliverysystem.Model.SecureToken;
+import com.ga.deliverysystem.Model.User;
+import com.ga.deliverysystem.Repository.ImageRepository;
+import com.ga.deliverysystem.Repository.UserProfileRepository;
+import com.ga.deliverysystem.Repository.UserRepository;
+import com.ga.deliverysystem.Security.JWTUtils;
+import com.ga.deliverysystem.Security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +36,12 @@ public class UserService {
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
-    private  final CounterRepository counterRepository;
-    @Autowired
+     @Autowired
     public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, SecureTokenService secureTokenService, ImageService imageService, ImageRepository imageRepository,
                        @Lazy PasswordEncoder passwordEncoder, EmailService emailService,
                        JWTUtils jwtUtils,
                        @Lazy AuthenticationManager authenticationManager,
-                       @Lazy MyUserDetails myUserDetails, CounterRepository counterRepository) {
+                       @Lazy MyUserDetails myUserDetails) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.secureTokenService = secureTokenService;
@@ -52,19 +52,12 @@ public class UserService {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
-        this.counterRepository = counterRepository;
     }
     public User createUser(User userObject){
         System.out.println("Service Calling createUser ==> ");
         if(!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
 
-            if (userObject.getRole()== UserRole.USER){
-                Counter counter=new Counter();
-                counter.setStatus(CounterStatus.WORKING);
-                counterRepository.save(counter);
-                userObject.setCounter(counter);
-            }
             emailService.sendEmail(
                     userObject.getEmailAddress(),
                     "Welcome "+userObject.getUserName(),
@@ -166,5 +159,10 @@ public class UserService {
 
     }
 
-
+//    public void validate(String token) {
+//        SecureToken secureToken = secureTokenService.findByToken(token);
+//        User user = secureToken.getUser();
+//        user.setActivated(true);
+//        userRepository.save(user);
+//    }
 }

@@ -1,9 +1,9 @@
-package com.ga.TicketSystemProject3.Service;
+package com.ga.deliverysystem.Service;
 
 
-import com.ga.TicketSystemProject3.Model.Image;
-import com.ga.TicketSystemProject3.Model.request.ImageRequest;
-import com.ga.TicketSystemProject3.Repository.ImageRepository;
+import com.ga.deliverysystem.Dto.request.ImageRequest;
+import com.ga.deliverysystem.Model.Image;
+import com.ga.deliverysystem.Repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.ga.TicketSystemProject3.Service;
+package com.ga.deliverysystem.Service;
 
 
-import com.ga.TicketSystemProject3.Model.SecureToken;
+import com.ga.deliverysystem.Model.SecureToken;
 
 public interface SecureTokenService {
 

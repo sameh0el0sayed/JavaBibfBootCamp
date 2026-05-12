@@ -1,8 +1,8 @@
-package com.ga.TicketSystemProject3.Service;
+package com.ga.deliverysystem.Service;
 
 
-import com.ga.TicketSystemProject3.Model.SecureToken;
-import com.ga.TicketSystemProject3.Repository.SecureTokenRepository;
+import com.ga.deliverysystem.Model.SecureToken;
+import com.ga.deliverysystem.Repository.SecureTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.keygen.BytesKeyGenerator;
