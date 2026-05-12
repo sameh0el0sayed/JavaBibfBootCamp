@@ -1,6 +1,6 @@
 package com.ga.deliverysystem.Model.Enum;
 
-public enum UserRole {
+public enum UserRoleEnum {
     USER,
     ADMIN
 }

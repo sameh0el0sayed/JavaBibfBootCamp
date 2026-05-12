@@ -8,7 +8,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "images")
-public class Image {
+public class ImageModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -22,7 +22,7 @@ public class Image {
 
     @OneToOne
     @JsonIgnore
-    private UserProfile userProfile;
+    private UserProfileModel userProfileModel;
 
     public UUID getId() {
         return id;
@@ -48,12 +48,12 @@ public class Image {
         this.url = url;
     }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
+    public UserProfileModel getUserProfileModel() {
+        return userProfileModel;
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
+    public void setUserProfileModel(UserProfileModel userProfileModel) {
+        this.userProfileModel = userProfileModel;
     }
 }
 

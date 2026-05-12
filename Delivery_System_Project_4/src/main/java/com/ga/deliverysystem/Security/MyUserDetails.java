@@ -1,36 +1,35 @@
 package com.ga.deliverysystem.Security;
-import com.ga.deliverysystem.Model.User;
+import com.ga.deliverysystem.Model.UserModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 public class MyUserDetails implements UserDetails {
 
-    private User user;
+    private UserModel userModel;
 
-    public MyUserDetails(User user) {
-        this.user = user;
+    public MyUserDetails(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole())
+                new SimpleGrantedAuthority("ROLE_" + userModel.getRole())
         );
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userModel.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmailAddress();
+        return userModel.getEmailAddress();
     }
 
     @Override
@@ -53,7 +52,7 @@ public class MyUserDetails implements UserDetails {
         return true;
     }
 
-    public User getUser() {
-        return user;
+    public UserModel getUser() {
+        return userModel;
     }
 }

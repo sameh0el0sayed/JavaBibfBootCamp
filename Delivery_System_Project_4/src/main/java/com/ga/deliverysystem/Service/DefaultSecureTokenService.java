@@ -1,7 +1,7 @@
 package com.ga.deliverysystem.Service;
 
 
-import com.ga.deliverysystem.Model.SecureToken;
+import com.ga.deliverysystem.Model.SecureTokenModel;
 import com.ga.deliverysystem.Repository.SecureTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,29 +21,29 @@ public class DefaultSecureTokenService implements SecureTokenService{
     SecureTokenRepository secureTokenRepository;
 
     @Override
-    public SecureToken createToken() {
+    public SecureTokenModel createToken() {
         String tokenValue = new String(Base64.getEncoder().encodeToString(DEFAULT_TOKEN_GENERATOR.generateKey()));
-        SecureToken secureToken=new SecureToken();
-        secureToken.setToken(tokenValue);
-        secureToken.setExpireAt(LocalDateTime.now().plusSeconds(tokenValidityInSeconds));
-        this.saveSecureToken(secureToken);
-        return secureToken;
+        SecureTokenModel secureTokenModel =new SecureTokenModel();
+        secureTokenModel.setToken(tokenValue);
+        secureTokenModel.setExpireAt(LocalDateTime.now().plusSeconds(tokenValidityInSeconds));
+        this.saveSecureToken(secureTokenModel);
+        return secureTokenModel;
 
     }
 
     @Override
-    public void saveSecureToken(SecureToken secureToken) {
-        secureTokenRepository.save(secureToken);
+    public void saveSecureToken(SecureTokenModel secureTokenModel) {
+        secureTokenRepository.save(secureTokenModel);
 
     }
 
     @Override
-    public SecureToken findByToken(String token) {
+    public SecureTokenModel findByToken(String token) {
         return secureTokenRepository.findByToken(token);
     }
 
     @Override
-    public void removeToken(SecureToken token) {
+    public void removeToken(SecureTokenModel token) {
         secureTokenRepository.removeByToken(token);
     }
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "profiles")
-public class UserProfile {
+public class UserProfileModel {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +21,10 @@ public class UserProfile {
 
     @JsonIgnore
     @OneToOne(mappedBy = "userProfile", fetch = FetchType.LAZY)
-    private User user;
+    private UserModel userModel;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Image image;
+    private ImageModel imageModel;
 
     public Long getId() {
         return id;
@@ -58,20 +58,20 @@ public class UserProfile {
         this.profileDescription = profileDescription;
     }
 
-    public User getUser() {
-        return user;
+    public UserModel getUser() {
+        return userModel;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserModel userModel) {
+        this.userModel = userModel;
     }
 
-    public Image getImage() {
-        return image;
+    public ImageModel getImage() {
+        return imageModel;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImage(ImageModel imageModel) {
+        this.imageModel = imageModel;
     }
 }
 

@@ -5,10 +5,9 @@ import com.ga.deliverysystem.Dto.request.ImageRequest;
 import com.ga.deliverysystem.Dto.request.LoginRequest;
 import com.ga.deliverysystem.Dto.response.LoginResponse;
 import com.ga.deliverysystem.Exception.InformationExistException;
-import com.ga.deliverysystem.Model.Enum.UserRole;
-import com.ga.deliverysystem.Model.Image;
-import com.ga.deliverysystem.Model.SecureToken;
-import com.ga.deliverysystem.Model.User;
+import com.ga.deliverysystem.Model.ImageModel;
+import com.ga.deliverysystem.Model.SecureTokenModel;
+import com.ga.deliverysystem.Model.UserModel;
 import com.ga.deliverysystem.Repository.ImageRepository;
 import com.ga.deliverysystem.Repository.UserProfileRepository;
 import com.ga.deliverysystem.Repository.UserRepository;
@@ -53,25 +52,25 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.myUserDetails = myUserDetails;
     }
-    public User createUser(User userObject){
+    public UserModel createUser(UserModel userModelObject){
         System.out.println("Service Calling createUser ==> ");
-        if(!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
-            userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
+        if(!userRepository.existsByEmailAddress(userModelObject.getEmailAddress())){
+            userModelObject.setPassword(passwordEncoder.encode(userModelObject.getPassword()));
 
             emailService.sendEmail(
-                    userObject.getEmailAddress(),
-                    "Welcome "+userObject.getUserName(),
+                    userModelObject.getEmailAddress(),
+                    "Welcome "+ userModelObject.getUserName(),
                     "Welcome to ower system"
             );
-            return userRepository.save(userObject);
+            return userRepository.save(userModelObject);
         }
         else
         {
-            throw new InformationExistException("User with email address " + userObject.getEmailAddress() + " already exists.");
+            throw new InformationExistException("User with email address " + userModelObject.getEmailAddress() + " already exists.");
         }
     }
 
-    public User findUserByEmailAddress(String email){
+    public UserModel findUserByEmailAddress(String email){
         return userRepository.findUserByEmailAddress(email);
     }
     public ResponseEntity<?> loginUser (LoginRequest loginRequest){
@@ -90,17 +89,17 @@ public class UserService {
             //return ResponseEntity.ok(new LoginResponse("Error : username or password is incorrect"));
         }
     }
-    public User setUserImage(ImageRequest image) {
-        User user = getUser();
-        System.out.println("found===" + user);
+    public UserModel setUserImage(ImageRequest image) {
+        UserModel userModel = getUser();
+        System.out.println("found===" + userModel);
         String imgUrl = imageService.uploadImage(image, "usersImages");
-        Image savedImage = imageRepository.findByUrl(imgUrl);
-        user.getUserProfile().setImage(savedImage);
-        userRepository.save(user);
+        ImageModel savedImageModel = imageRepository.findByUrl(imgUrl);
+        userModel.getUserProfile().setImage(savedImageModel);
+        userRepository.save(userModel);
 
-        return user;
+        return userModel;
     }
-    public User getUser() {
+    public UserModel getUser() {
         // return the user object from the user details object from the security context holder
         return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
@@ -109,33 +108,33 @@ public class UserService {
 
     public void softDelete() {
 
-        User user = getUser();
-        user.setActivated(false);
-         userRepository.save(user);
+        UserModel userModel = getUser();
+        userModel.setActivated(false);
+         userRepository.save(userModel);
     }
 
 
     public void resetPassword(String email) {
-        SecureToken secureToken = secureTokenService.createToken();
-        User user = userRepository.findUserByEmailAddress(email);
-        System.out.println("service found user ====> " + user.getUserName());
-        secureToken.setUser(user);
-        secureTokenService.saveSecureToken(secureToken);
+        SecureTokenModel secureTokenModel = secureTokenService.createToken();
+        UserModel userModel = userRepository.findUserByEmailAddress(email);
+        System.out.println("service found user ====> " + userModel.getUserName());
+        secureTokenModel.setUser(userModel);
+        secureTokenService.saveSecureToken(secureTokenModel);
 
 
-        System.out.println("sending email to " + user.getEmailAddress());
+        System.out.println("sending email to " + userModel.getEmailAddress());
         emailService.sendEmail(
-                user.getEmailAddress(),
+                userModel.getEmailAddress(),
                 "Reset Password",
-                "Click here to reset your password: " + secureToken.getToken()
+                "Click here to reset your password: " + secureTokenModel.getToken()
         );
     }
 
-    public void resetPasswordActivator(String token, User userObj) {
-        SecureToken secureToken = secureTokenService.findByToken(token);
-        User user = secureToken.getUser();
-        user.setPassword(passwordEncoder.encode(userObj.getPassword()));
-        userRepository.save(user);
+    public void resetPasswordActivator(String token, UserModel userModelObj) {
+        SecureTokenModel secureTokenModel = secureTokenService.findByToken(token);
+        UserModel userModel = secureTokenModel.getUser();
+        userModel.setPassword(passwordEncoder.encode(userModelObj.getPassword()));
+        userRepository.save(userModel);
 
     }
 
@@ -145,13 +144,13 @@ public class UserService {
                 SecurityContextHolder.getContext().getAuthentication();
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
         System.out.println("the user");
-        User user = myUserDetails.getUser();
+        UserModel userModel = myUserDetails.getUser();
 
         try {
-            if (passwordEncoder.matches(oldPass, user.getPassword())) {
+            if (passwordEncoder.matches(oldPass, userModel.getPassword())) {
 
-                user.setPassword(passwordEncoder.encode(newPass));
-                userRepository.save(user);
+                userModel.setPassword(passwordEncoder.encode(newPass));
+                userRepository.save(userModel);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

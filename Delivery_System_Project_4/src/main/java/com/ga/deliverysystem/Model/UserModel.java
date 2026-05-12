@@ -1,13 +1,12 @@
 package com.ga.deliverysystem.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ga.deliverysystem.Model.Enum.UserRole;
+import com.ga.deliverysystem.Model.Enum.UserRoleEnum;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class UserModel {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +22,15 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @JsonIgnore
-    @OneToOne(
-            fetch = FetchType.LAZY
-    )
-
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
+    @Column(name = "role",nullable = false)
+    private UserRoleEnum role;
+
     @OneToOne(
             cascade = CascadeType.ALL, fetch = FetchType.EAGER
     )
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    private UserProfile userProfile;
+    private UserProfileModel userProfileModel;
     public Long getId() {
         return id;
     }
@@ -70,20 +64,20 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getRole() {
+    public UserRoleEnum getRole() {
         return role;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(UserRoleEnum role) {
         this.role = role;
     }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
+    public UserProfileModel getUserProfile() {
+        return userProfileModel;
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
+    public void setUserProfile(UserProfileModel userProfileModel) {
+        this.userProfileModel = userProfileModel;
     }
 
     public boolean isActivated() {

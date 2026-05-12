@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class SecureToken {
+public class SecureTokenModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,7 +13,7 @@ public class SecureToken {
     private LocalDateTime expireAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserModel userModel;
 
     public Long getId() {
         return id;
@@ -39,12 +39,12 @@ public class SecureToken {
         this.expireAt = expireAt;
     }
 
-    public User getUser() {
-        return user;
+    public UserModel getUser() {
+        return userModel;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserModel userModel) {
+        this.userModel = userModel;
     }
 }
 

@@ -1,8 +1,8 @@
 package com.ga.deliverysystem.Seeder;
 
-import com.ga.deliverysystem.Model.Enum.UserRole;
-import com.ga.deliverysystem.Model.User;
-import com.ga.deliverysystem.Model.UserProfile;
+import com.ga.deliverysystem.Model.Enum.UserRoleEnum;
+import com.ga.deliverysystem.Model.UserModel;
+import com.ga.deliverysystem.Model.UserProfileModel;
 import com.ga.deliverysystem.Service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,15 +19,15 @@ public class UserSeeder implements CommandLineRunner {
 
         try {
 
-            User admin = new User();
+            UserModel admin = new UserModel();
             admin.setUserName("admin");
             admin.setEmailAddress("admin@test.com");
             admin.setPassword("123456");
-            admin.setRole(UserRole.ADMIN);
-            UserProfile userProfile =new UserProfile();
-            userProfile.setFirstName(admin.getUserName());
-            userProfile.setLastName(admin.getUserName());
-            admin.setUserProfile(userProfile);
+            admin.setRole(UserRoleEnum.ADMIN);
+            UserProfileModel userProfileModel =new UserProfileModel();
+            userProfileModel.setFirstName(admin.getUserName());
+            userProfileModel.setLastName(admin.getUserName());
+            admin.setUserProfile(userProfileModel);
             userService.createUser(admin);
 
         } catch (Exception e) {
@@ -36,16 +36,16 @@ public class UserSeeder implements CommandLineRunner {
 
         try {
 
-            User user = new User();
-            user.setUserName("user1");
-            user.setEmailAddress("user1@test.com");
-            user.setPassword("123456");
-            user.setRole(UserRole.USER);
-            UserProfile userProfile =new UserProfile();
-            userProfile.setFirstName(user.getUserName());
-            userProfile.setLastName(user.getUserName());
-            user.setUserProfile(userProfile);
-            userService.createUser(user);
+            UserModel userModel = new UserModel();
+            userModel.setUserName("user1");
+            userModel.setEmailAddress("user1@test.com");
+            userModel.setPassword("123456");
+            userModel.setRole(UserRoleEnum.USER);
+            UserProfileModel userProfileModel =new UserProfileModel();
+            userProfileModel.setFirstName(userModel.getUserName());
+            userProfileModel.setLastName(userModel.getUserName());
+            userModel.setUserProfile(userProfileModel);
+            userService.createUser(userModel);
 
 
 

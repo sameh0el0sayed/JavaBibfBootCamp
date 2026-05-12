@@ -1,13 +1,13 @@
 package com.ga.deliverysystem.Service;
 
 
-import com.ga.deliverysystem.Model.SecureToken;
+import com.ga.deliverysystem.Model.SecureTokenModel;
 
 public interface SecureTokenService {
 
-    SecureToken createToken();
-    void saveSecureToken(SecureToken secureToken);
-    SecureToken findByToken(String token);
-    void removeToken(SecureToken token);
+    SecureTokenModel createToken();
+    void saveSecureToken(SecureTokenModel secureTokenModel);
+    SecureTokenModel findByToken(String token);
+    void removeToken(SecureTokenModel token);
 
 }
