@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "images")
+@Table(name = "Images")
 public class ImageModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -55,5 +55,6 @@ public class ImageModel {
     public void setUserProfileModel(UserProfileModel userProfileModel) {
         this.userProfileModel = userProfileModel;
     }
+
 }
 

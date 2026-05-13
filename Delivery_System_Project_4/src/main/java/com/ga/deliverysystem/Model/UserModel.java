@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ga.deliverysystem.Model.Enum.UserRoleEnum;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Users")
 public class UserModel {
@@ -31,6 +33,13 @@ public class UserModel {
     )
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private UserProfileModel userProfileModel;
+
+
+    @OneToMany(
+           mappedBy = "user", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER
+    )
+    private List<OrderModel> orderModels;
+
     public Long getId() {
         return id;
     }
@@ -86,5 +95,21 @@ public class UserModel {
 
     public void setActivated(boolean activated) {
         Activated = activated;
+    }
+
+    public UserProfileModel getUserProfileModel() {
+        return userProfileModel;
+    }
+
+    public void setUserProfileModel(UserProfileModel userProfileModel) {
+        this.userProfileModel = userProfileModel;
+    }
+
+    public List<OrderModel> getOrderModels() {
+        return orderModels;
+    }
+
+    public void setOrderModels(List<OrderModel> orderModels) {
+        this.orderModels = orderModels;
     }
 }

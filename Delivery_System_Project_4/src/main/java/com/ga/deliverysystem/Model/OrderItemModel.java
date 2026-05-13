@@ -26,4 +26,43 @@ public class OrderItemModel {
     @JoinColumn(name = "ProductId",referencedColumnName = "Id")
     private ProductModel product;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Float getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Float quantity) {
+        this.quantity = quantity;
+    }
+
+    public Float getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Float unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public OrderModel getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderModel order) {
+        this.order = order;
+    }
+
+    public ProductModel getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductModel product) {
+        this.product = product;
+    }
 }
